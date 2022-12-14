@@ -27,12 +27,21 @@
                                     <action selector="navegateToWebsite:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Wo3-2N-pZF"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pdw-B3-5m1">
+                                <rect key="frame" x="300" y="765" width="94" height="73"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button" image="icons8-add-64.png"/>
+                                <connections>
+                                    <action selector="addNewWeb:" destination="BYZ-38-t0r" eventType="touchUpInside" id="h7P-Zg-a46"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <navigationItem key="navigationItem" id="fco-r9-kGX"/>
                     <connections>
+                        <outlet property="addBtn" destination="pdw-B3-5m1" id="om7-vd-6zE"/>
                         <outlet property="connectBtn" destination="hxw-zF-pcs" id="Vtb-DA-Q3b"/>
                     </connections>
                 </viewController>
@@ -82,6 +91,7 @@ CQ
         </scene>
     </scenes>
     <resources>
+        <image name="icons8-add-64.png" width="64" height="64"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

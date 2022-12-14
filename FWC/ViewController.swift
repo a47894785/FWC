@@ -11,6 +11,7 @@ import WebKit
 class ViewController: UIViewController {
 
     @IBOutlet weak var connectBtn: UIButton!
+    @IBOutlet weak var addBtn: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -24,6 +25,11 @@ class ViewController: UIViewController {
         }
         
         
+        
+    }
+    @IBAction func addNewWeb(_ sender: Any) {
+        
+    
         
     }
 }

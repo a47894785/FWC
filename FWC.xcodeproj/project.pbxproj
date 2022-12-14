@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		CE00C5842949FDCD009B060D /* LaunchScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = CE00C5832949FDCD009B060D /* LaunchScreen.png */; };
+		CE00C587294A0098009B060D /* icons8-add-64.png in Resources */ = {isa = PBXBuildFile; fileRef = CE00C586294A0098009B060D /* icons8-add-64.png */; };
 		CEE936602940D07800945C64 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE9365F2940D07800945C64 /* AppDelegate.swift */; };
 		CEE936622940D07800945C64 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE936612940D07800945C64 /* SceneDelegate.swift */; };
 		CEE936642940D07800945C64 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE936632940D07800945C64 /* ViewController.swift */; };
@@ -19,6 +20,7 @@
 
 /* Begin PBXFileReference section */
 		CE00C5832949FDCD009B060D /* LaunchScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchScreen.png; sourceTree = "<group>"; };
+		CE00C586294A0098009B060D /* icons8-add-64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icons8-add-64.png"; sourceTree = "<group>"; };
 		CEE9365C2940D07800945C64 /* FWC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FWC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEE9365F2940D07800945C64 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CEE936612940D07800945C64 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -44,6 +46,7 @@
 		CE00C5822949FD9D009B060D /* images */ = {
 			isa = PBXGroup;
 			children = (
+				CE00C586294A0098009B060D /* icons8-add-64.png */,
 				CE00C5832949FDCD009B060D /* LaunchScreen.png */,
 			);
 			path = images;
@@ -141,6 +144,7 @@
 				CEE9366C2940D07900945C64 /* LaunchScreen.storyboard in Resources */,
 				CEE936692940D07900945C64 /* Assets.xcassets in Resources */,
 				CE00C5842949FDCD009B060D /* LaunchScreen.png in Resources */,
+				CE00C587294A0098009B060D /* icons8-add-64.png in Resources */,
 				CEE936672940D07800945C64 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
