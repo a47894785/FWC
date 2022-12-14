@@ -29,7 +29,34 @@ class ViewController: UIViewController {
     }
     @IBAction func addNewWeb(_ sender: Any) {
         
-    
+        let alertController = UIAlertController(title: "新增常用網站", message: "輸入資訊", preferredStyle: .alert)
+        // cancel button
+        let cancelAct = UIAlertAction(title: "取消", style: .cancel, handler: {(action: UIAlertAction!) -> Void in print("Cancel button pressed!")})
+        alertController.addAction(cancelAct)
         
+        // text input
+        alertController.addTextField(configurationHandler: {
+            (textField: UITextField) -> Void in
+            textField.placeholder = "輸入網址"
+        })
+        
+        alertController.addTextField(configurationHandler: {
+            (textField: UITextField) -> Void in
+            textField.placeholder = "輸入名稱"
+        })
+        
+        // confirm button
+        let confirmAct = UIAlertAction(title: "確認", style: .default, handler: {(UIAlertAction) -> Void in
+            let webUrl = (alertController.textFields?.first)! as UITextField
+            
+            let webName = (alertController.textFields?.last)! as UITextField
+            
+            print("網站網址是：\(String(describing: webUrl.text))")
+            print("網站名稱是：\(String(describing: webName.text))")
+            
+        })
+        alertController.addAction(confirmAct)
+        
+        self.present(alertController, animated: true, completion: nil)
     }
 }
