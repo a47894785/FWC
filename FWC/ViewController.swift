@@ -15,7 +15,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        var	 hello:String
+        let isCreated = DBManager.shared.createDB()
+        print(isCreated)
+        let openDB = DBManager.shared.openDB()
+        print(openDB)
     }
 
 
@@ -51,8 +54,8 @@ class ViewController: UIViewController {
             
             let webName = (alertController.textFields?.last)! as UITextField
             
-            print("網站網址是：\(String(describing: webUrl.text))")
-            print("網站名稱是：\(String(describing: webName.text))")
+            print("網站網址是：\(webUrl.text!)")
+            print("網站名稱是：\(webName.text!)")
             
         })
         alertController.addAction(confirmAct)

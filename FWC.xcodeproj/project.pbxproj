@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		CE00C5842949FDCD009B060D /* LaunchScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = CE00C5832949FDCD009B060D /* LaunchScreen.png */; };
 		CE00C587294A0098009B060D /* icons8-add-64.png in Resources */ = {isa = PBXBuildFile; fileRef = CE00C586294A0098009B060D /* icons8-add-64.png */; };
+		CE3CFD87294AF9740051ECA5 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3CFD7C294AF9740051ECA5 /* FMDatabaseAdditions.m */; };
+		CE3CFD88294AF9740051ECA5 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3CFD7E294AF9740051ECA5 /* FMDatabase.m */; };
+		CE3CFD89294AF9740051ECA5 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3CFD80294AF9740051ECA5 /* FMDatabaseQueue.m */; };
+		CE3CFD8A294AF9740051ECA5 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3CFD83294AF9740051ECA5 /* FMResultSet.m */; };
+		CE3CFD8B294AF9740051ECA5 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3CFD84294AF9740051ECA5 /* FMDatabasePool.m */; };
+		CE3CFD8F294AFA320051ECA5 /* DBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3CFD8E294AFA320051ECA5 /* DBManager.swift */; };
 		CEE936602940D07800945C64 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE9365F2940D07800945C64 /* AppDelegate.swift */; };
 		CEE936622940D07800945C64 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE936612940D07800945C64 /* SceneDelegate.swift */; };
 		CEE936642940D07800945C64 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE936632940D07800945C64 /* ViewController.swift */; };
@@ -21,6 +27,20 @@
 /* Begin PBXFileReference section */
 		CE00C5832949FDCD009B060D /* LaunchScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchScreen.png; sourceTree = "<group>"; };
 		CE00C586294A0098009B060D /* icons8-add-64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icons8-add-64.png"; sourceTree = "<group>"; };
+		CE3CFD77294AF56C0051ECA5 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		CE3CFD7B294AF9730051ECA5 /* FWC-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FWC-Bridging-Header.h"; sourceTree = "<group>"; };
+		CE3CFD7C294AF9740051ECA5 /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseAdditions.m; sourceTree = "<group>"; };
+		CE3CFD7D294AF9740051ECA5 /* FMDatabaseQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseQueue.h; sourceTree = "<group>"; };
+		CE3CFD7E294AF9740051ECA5 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
+		CE3CFD7F294AF9740051ECA5 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
+		CE3CFD80294AF9740051ECA5 /* FMDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseQueue.m; sourceTree = "<group>"; };
+		CE3CFD81294AF9740051ECA5 /* FMDatabasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabasePool.h; sourceTree = "<group>"; };
+		CE3CFD82294AF9740051ECA5 /* FMDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDB.h; sourceTree = "<group>"; };
+		CE3CFD83294AF9740051ECA5 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
+		CE3CFD84294AF9740051ECA5 /* FMDatabasePool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabasePool.m; sourceTree = "<group>"; };
+		CE3CFD85294AF9740051ECA5 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
+		CE3CFD86294AF9740051ECA5 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
+		CE3CFD8E294AFA320051ECA5 /* DBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBManager.swift; sourceTree = "<group>"; };
 		CEE9365C2940D07800945C64 /* FWC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FWC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEE9365F2940D07800945C64 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CEE936612940D07800945C64 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -52,11 +72,39 @@
 			path = images;
 			sourceTree = "<group>";
 		};
+		CE3CFD76294AF56C0051ECA5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CE3CFD77294AF56C0051ECA5 /* libsqlite3.tbd */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CE3CFD7A294AF93C0051ECA5 /* FMDB */ = {
+			isa = PBXGroup;
+			children = (
+				CE3CFD7F294AF9740051ECA5 /* FMDatabase.h */,
+				CE3CFD7E294AF9740051ECA5 /* FMDatabase.m */,
+				CE3CFD86294AF9740051ECA5 /* FMDatabaseAdditions.h */,
+				CE3CFD7C294AF9740051ECA5 /* FMDatabaseAdditions.m */,
+				CE3CFD81294AF9740051ECA5 /* FMDatabasePool.h */,
+				CE3CFD84294AF9740051ECA5 /* FMDatabasePool.m */,
+				CE3CFD7D294AF9740051ECA5 /* FMDatabaseQueue.h */,
+				CE3CFD80294AF9740051ECA5 /* FMDatabaseQueue.m */,
+				CE3CFD82294AF9740051ECA5 /* FMDB.h */,
+				CE3CFD85294AF9740051ECA5 /* FMResultSet.h */,
+				CE3CFD83294AF9740051ECA5 /* FMResultSet.m */,
+				CE3CFD7B294AF9730051ECA5 /* FWC-Bridging-Header.h */,
+			);
+			path = FMDB;
+			sourceTree = "<group>";
+		};
 		CEE936532940D07800945C64 = {
 			isa = PBXGroup;
 			children = (
 				CEE9365E2940D07800945C64 /* FWC */,
 				CEE9365D2940D07800945C64 /* Products */,
+				CE3CFD76294AF56C0051ECA5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -71,6 +119,7 @@
 		CEE9365E2940D07800945C64 /* FWC */ = {
 			isa = PBXGroup;
 			children = (
+				CE3CFD7A294AF93C0051ECA5 /* FMDB */,
 				CE00C5822949FD9D009B060D /* images */,
 				CEE9365F2940D07800945C64 /* AppDelegate.swift */,
 				CEE936612940D07800945C64 /* SceneDelegate.swift */,
@@ -80,6 +129,7 @@
 				CEE9366A2940D07900945C64 /* LaunchScreen.storyboard */,
 				CEE9366D2940D07900945C64 /* Info.plist */,
 				CEE936812940DA7600945C64 /* SideMenuViewController.swift */,
+				CE3CFD8E294AFA320051ECA5 /* DBManager.swift */,
 			);
 			path = FWC;
 			sourceTree = "<group>";
@@ -115,6 +165,7 @@
 				TargetAttributes = {
 					CEE9365B2940D07800945C64 = {
 						CreatedOnToolsVersion = 12.4;
+						LastSwiftMigration = 1210;
 					};
 				};
 			};
@@ -159,7 +210,13 @@
 				CEE936822940DA7600945C64 /* SideMenuViewController.swift in Sources */,
 				CEE936642940D07800945C64 /* ViewController.swift in Sources */,
 				CEE936602940D07800945C64 /* AppDelegate.swift in Sources */,
+				CE3CFD89294AF9740051ECA5 /* FMDatabaseQueue.m in Sources */,
+				CE3CFD8B294AF9740051ECA5 /* FMDatabasePool.m in Sources */,
+				CE3CFD8F294AFA320051ECA5 /* DBManager.swift in Sources */,
+				CE3CFD88294AF9740051ECA5 /* FMDatabase.m in Sources */,
 				CEE936622940D07800945C64 /* SceneDelegate.swift in Sources */,
+				CE3CFD8A294AF9740051ECA5 /* FMResultSet.m in Sources */,
+				CE3CFD87294AF9740051ECA5 /* FMDatabaseAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -306,14 +363,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = FWC/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = tw.edu.fcu.d0843806.FWC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "FWC/FMDB/FWC-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -324,14 +385,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = FWC/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = tw.edu.fcu.d0843806.FWC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "FWC/FMDB/FWC-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
