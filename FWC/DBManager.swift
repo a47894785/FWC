@@ -29,7 +29,7 @@ class DBManager: NSObject {
             if database != nil {
                 // open database
                 if database.open() {
-                    let createTypeTable = "create table webType(category text not null)"
+                    let createTypeTable = "create table webInfo (webID integer primary key autoincrement not null, name text not null, url text not null)"
                     
                     do {
                         try database.executeUpdate(createTypeTable, values: nil)
@@ -68,4 +68,43 @@ class DBManager: NSObject {
         return false
     }
     
+    func insertWebInfo(webName:String, webUrl:String) ->  Bool {
+        if openDB() {
+            print("ready to insert")
+            let query = "insert into webInfo (webID, name, url) values (null, '\(webName)','\(webUrl)');"
+            if !database.executeStatements(query) {
+                print("failed to insert")
+                print(database.lastError(), database.lastErrorMessage())
+                return false
+            }
+            
+            database.close()
+            return true
+        }
+        return false
+    }
+    
+    func showWebInfoTable()  {
+        if openDB() {
+            let query = "select * from webInfo"
+            
+            do {
+                print("---webInfo---")
+                let results = try database.executeQuery(query, values: nil)
+                
+                while results.next() {
+                    let webID = results.int(forColumn: "webID")
+                    let webName = results.string(forColumn: "name")
+                    let webUrl = results.string(forColumn: "url")
+                    
+                    print("---------------\nwebID: \(webID) \nwebName: \(webName!) \nwebUrl: \(webUrl!)")
+                }
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+        database.close()
+    }
+    
 }
+	

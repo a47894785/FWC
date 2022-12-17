@@ -23,12 +23,7 @@ class ViewController: UIViewController {
 
 
     @IBAction func navegateToWebsite(_ sender: Any) {
-        if let url	= URL(string: "https://www.youtube.com/?hl=zh-tw") {
-            UIApplication.shared.open(url)
-        }
-        
-        
-        
+        DBManager.shared.showWebInfoTable()
     }
     @IBAction func addNewWeb(_ sender: Any) {
         
@@ -56,6 +51,14 @@ class ViewController: UIViewController {
             
             print("網站網址是：\(webUrl.text!)")
             print("網站名稱是：\(webName.text!)")
+            
+            let isInserted = DBManager.shared.insertWebInfo(webName: webName.text!, webUrl: webUrl.text!)
+            
+            if isInserted {
+                print("insert successfully")
+            } else {
+                print("insert failed")
+            }
             
         })
         alertController.addAction(confirmAct)
