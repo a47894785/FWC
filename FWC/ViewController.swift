@@ -18,18 +18,34 @@ class ViewController: UIViewController {
     let dropDownMenu = ["一般", "實習"]
     var dropDownSelected: Int = 0
     
-    //
-    @IBOutlet weak var connectBtn: UIButton!
-    @IBOutlet weak var addBtn: UIButton!
+    // floating Button
+    private let addBtn: UIButton = {
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
+        button.backgroundColor =  #colorLiteral(red: 0.2320531011, green: 0.2503858805, blue: 0.3496725261, alpha: 1)
+        
+        let image = UIImage(systemName: "plus", withConfiguration: UIImage.SymbolConfiguration(pointSize: 32, weight: .medium))
+        
+        button.setImage(image, for: .normal)
+        button.tintColor = .white
+        button.setTitleColor(.white, for: .normal)
+        button.layer.shadowRadius = 10
+        button.layer.shadowOpacity = 0.3
+        
+        button.layer.cornerRadius = 30
+        
+        return button
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        view.addSubview(addBtn)
+        addBtn.addTarget(self, action: #selector(addNewWeb), for: .touchUpInside	)
         let isCreated = DBManager.shared.createDB()
         print(isCreated)
         let openDB = DBManager.shared.openDB()
         print(openDB)
-    }
+    }	
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -49,17 +65,23 @@ class ViewController: UIViewController {
         print("\n-")
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        addBtn.frame = CGRect(x: view.frame.size.width - 90, y: view.frame.size.height - 120, width: 60, height: 60)
+    }
+    
     
     @IBAction func showDropMenu(_ sender: Any) {
         dropDown.show()
     }
     
-    @IBAction func navegateToWebsite(_ sender: Any) {
-        DBManager.shared.showWebInfoTable()
-        self.viewDidAppear(true)
-    }
+//    @IBAction func navegateToWebsite(_ sender: Any) {
+//        DBManager.shared.showWebInfoTable()
+//        self.viewDidAppear(true)
+//    }
     
-    @IBAction func addNewWeb(_ sender: Any) {
+    
+    @objc private func addNewWeb(_ sender: Any) {
         
         let alertController = UIAlertController(title: "新增常用網站", message: "輸入資訊", preferredStyle: .alert)
         // cancel button
