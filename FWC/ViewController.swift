@@ -12,6 +12,7 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var connectBtn: UIButton!
     @IBOutlet weak var addBtn: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -21,15 +22,25 @@ class ViewController: UIViewController {
         print(openDB)
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        print("-\n|===========| - viewDidAppear - |===========|\n-")
+    }
 
     @IBAction func navegateToWebsite(_ sender: Any) {
         DBManager.shared.showWebInfoTable()
+        self.viewDidAppear(true)
     }
+    
     @IBAction func addNewWeb(_ sender: Any) {
         
         let alertController = UIAlertController(title: "新增常用網站", message: "輸入資訊", preferredStyle: .alert)
         // cancel button
-        let cancelAct = UIAlertAction(title: "取消", style: .cancel, handler: {(action: UIAlertAction!) -> Void in print("Cancel button pressed!")})
+        let cancelAct = UIAlertAction(title: "取消", style: .cancel, handler: {(action: UIAlertAction!) -> Void in
+            print("Cancel button pressed!")
+            self.viewDidAppear(true)
+        })
         alertController.addAction(cancelAct)
         
         // text input
@@ -59,7 +70,7 @@ class ViewController: UIViewController {
             } else {
                 print("insert failed")
             }
-            
+            self.viewDidAppear(true)
         })
         alertController.addAction(confirmAct)
         
