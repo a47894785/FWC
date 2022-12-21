@@ -7,9 +7,18 @@
 
 import UIKit
 import WebKit
+import DropDown
 
 class ViewController: UIViewController {
 
+    // drop down menu outlets
+    @IBOutlet weak var dropDownView: UIView!
+    @IBOutlet weak var typeLabel: UILabel!
+    let dropDown = DropDown()
+    let dropDownMenu = ["一般", "實習"]
+    var dropDownSelected: Int = 0
+    
+    //
     @IBOutlet weak var connectBtn: UIButton!
     @IBOutlet weak var addBtn: UIButton!
     
@@ -25,9 +34,26 @@ class ViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        print("-\n|===========| - viewDidAppear - |===========|\n-")
+        print("-\n|===========| - viewDidAppear - |===========|")
+        typeLabel.text = dropDownMenu[dropDownSelected]
+        dropDown.anchorView = dropDownView
+        dropDown.dataSource = dropDownMenu
+        dropDown.bottomOffset = CGPoint(x: 0, y: (dropDown.anchorView?.plainView.bounds.height)!)
+        dropDown.topOffset = CGPoint(x: 0, y: -(dropDown.anchorView?.plainView.bounds.height)!)
+        dropDown.direction = .bottom
+        dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
+          print("Selected item: \(item) at index: \(index)")
+            self.typeLabel.text = dropDownMenu[index]
+            dropDownSelected = index
+        }
+        print("\n-")
     }
-
+    
+    
+    @IBAction func showDropMenu(_ sender: Any) {
+        dropDown.show()
+    }
+    
     @IBAction func navegateToWebsite(_ sender: Any) {
         DBManager.shared.showWebInfoTable()
         self.viewDidAppear(true)
