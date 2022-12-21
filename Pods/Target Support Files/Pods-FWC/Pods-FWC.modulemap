@@ -1,0 +1,6 @@
+framework module Pods_FWC {
+  umbrella header "Pods-FWC-umbrella.h"
+
+  export *
+  module * { export * }
+}
