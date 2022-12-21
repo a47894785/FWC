@@ -29,7 +29,7 @@ class DBManager: NSObject {
             if database != nil {
                 // open database
                 if database.open() {
-                    let createTypeTable = "create table webInfo (webID integer primary key autoincrement not null, name text not null, url text not null)"
+                    let createTypeTable = "create table webInfo (webID integer primary key autoincrement not null, name text not null, url text not null, type text not null)"
                     
                     do {
                         try database.executeUpdate(createTypeTable, values: nil)
@@ -68,10 +68,10 @@ class DBManager: NSObject {
         return false
     }
     
-    func insertWebInfo(webName:String, webUrl:String) ->  Bool {
+    func insertWebInfo(webName:String, webUrl:String, webType:String) ->  Bool {
         if openDB() {
             print("ready to insert")
-            let query = "insert into webInfo (webID, name, url) values (null, '\(webName)','\(webUrl)');"
+            let query = "insert into webInfo (webID, name, url, type) values (null, '\(webName)','\(webUrl)', '\(webType)');"
             if !database.executeStatements(query) {
                 print("failed to insert")
                 print(database.lastError(), database.lastErrorMessage())
@@ -96,8 +96,9 @@ class DBManager: NSObject {
                     let webID = results.int(forColumn: "webID")
                     let webName = results.string(forColumn: "name")
                     let webUrl = results.string(forColumn: "url")
+                    let webType = results.string(forColumn: "type")
                     
-                    print("---------------\nwebID: \(webID) \nwebName: \(webName!) \nwebUrl: \(webUrl!)")
+                    print("---------------\nwebID: \(webID) \nwebName: \(webName!) \nwebUrl: \(webUrl!) \nwebType: \(webType!)")
                 }
             } catch {
                 print(error.localizedDescription)

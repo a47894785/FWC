@@ -9,14 +9,18 @@ import UIKit
 import WebKit
 import DropDown
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
 
     // drop down menu outlets
     @IBOutlet weak var dropDownView: UIView!
     @IBOutlet weak var typeLabel: UILabel!
     let dropDown = DropDown()
-    let dropDownMenu = ["一般", "實習"]
+    let dropDownMenu = ["一般", "實習", "研究所", "政府", "學校"]
     var dropDownSelected: Int = 0
+    
+    // picker view
+    var pickerView = UIPickerView()
+    var webType = String()
     
     // floating Button
     private let addBtn: UIButton = {
@@ -62,6 +66,7 @@ class ViewController: UIViewController {
             self.typeLabel.text = dropDownMenu[index]
             dropDownSelected = index
         }
+        DBManager.shared.showWebInfoTable()
         print("\n-")
     }
     
@@ -83,24 +88,33 @@ class ViewController: UIViewController {
     
     @objc private func addNewWeb(_ sender: Any) {
         
-        let alertController = UIAlertController(title: "新增常用網站", message: "輸入資訊", preferredStyle: .alert)
-        // cancel button
-        let cancelAct = UIAlertAction(title: "取消", style: .cancel, handler: {(action: UIAlertAction!) -> Void in
-            print("Cancel button pressed!")
-            self.viewDidAppear(true)
-        })
-        alertController.addAction(cancelAct)
+        let alertController = UIAlertController(title: "新增常用網站", message: "輸入資訊\n\n\n\n", preferredStyle: .alert)
         
         // text input
         alertController.addTextField(configurationHandler: {
             (textField: UITextField) -> Void in
             textField.placeholder = "輸入網址"
+            textField.font = UIFont(name: "S", size: 24)
         })
-        
+
         alertController.addTextField(configurationHandler: {
             (textField: UITextField) -> Void in
             textField.placeholder = "輸入名稱"
+            textField.font = UIFont(name: "", size: 24)
         })
+        
+        // picker view
+        let pickerFrame = UIPickerView(frame: CGRect(x: 10, y: 60, width: 250, height: 80))
+        pickerFrame.setValue(UIColor.orange, forKey: "textColor")
+        pickerFrame.dataSource = self
+        pickerFrame.delegate = self
+        
+        // cancel button
+        let cancelAct = UIAlertAction(title: "取消", style: .cancel, handler: {(action: UIAlertAction!) -> Void in
+            print("Cancel button pressed!")
+            self.viewDidAppear(true)
+        })
+        
         
         // confirm button
         let confirmAct = UIAlertAction(title: "確認", style: .default, handler: {(UIAlertAction) -> Void in
@@ -110,8 +124,9 @@ class ViewController: UIViewController {
             
             print("網站網址是：\(webUrl.text!)")
             print("網站名稱是：\(webName.text!)")
+            print("網站類型是：\(self.webType)")
             
-            let isInserted = DBManager.shared.insertWebInfo(webName: webName.text!, webUrl: webUrl.text!)
+            let isInserted = DBManager.shared.insertWebInfo(webName: webName.text!, webUrl: webUrl.text!, webType: self.webType)
             
             if isInserted {
                 print("insert successfully")
@@ -120,8 +135,29 @@ class ViewController: UIViewController {
             }
             self.viewDidAppear(true)
         })
+        
+        alertController.view.addSubview(pickerFrame)
         alertController.addAction(confirmAct)
+        alertController.addAction(cancelAct)
         
         self.present(alertController, animated: true, completion: nil)
     }
+    
+    // picker view
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return dropDownMenu.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return dropDownMenu[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        webType = dropDownMenu[row]
+    }
+    
 }
