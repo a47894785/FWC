@@ -21,12 +21,10 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     @IBOutlet weak var dropDownView: UIView!
     @IBOutlet weak var typeLabel: UILabel!
     let dropDown = DropDown()
-//    var dropDownMenu = ["全部", "一般", "實習", "研究所", "政府", "學校"]
     var dataTypeList: [String] = []
     var dropDownSelected: Int = 0
     
     // picker view
-//    var pickerViewMenu = ["一般", "實習", "研究所", "政府", "學校"]
     var pickerViewMenu: [String] = []
     var pickerView = UIPickerView()
     var webType:String = "一般"
@@ -86,11 +84,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         
         dataTypeList = DBManager.shared.getWebTypeInfo()
         dataTypeList.insert("全部", at: 0)
-        for data in dataTypeList {
-            print(data)
-        }
         pickerViewMenu = Array(dataTypeList[1 ... dataTypeList.count - 1])
-        print(pickerViewMenu)
         
         webDataList = DBManager.shared.showWebInfoTable()
         if webDataList.count != 0 {
@@ -106,14 +100,16 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         dataTypeList = DBManager.shared.getWebTypeInfo()
         dataTypeList.insert("全部", at: 0)
         webDataList = DBManager.shared.showWebInfoTable()
-        
-        pickerViewMenu = Array(dataTypeList[1 ... dataTypeList.count - 1])
-        print(pickerViewMenu)
-        
-        webDataList = DBManager.shared.showWebInfoTable()
         if webDataList.count != 0 {
             countVal = webDataList.count
         }
+        
+        countVal = countWebByType(typeLabel: dataTypeList[dropDownSelected])
+        
+        pickerViewMenu = Array(dataTypeList[1 ... dataTypeList.count - 1])
+        
+        webDataList = DBManager.shared.showWebInfoTable()
+        
         
         dropDownView.layer.cornerRadius = 15
         dropDown.anchorView = dropDownView
@@ -122,15 +118,13 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         dropDown.topOffset = CGPoint(x: 0, y: -(dropDown.anchorView?.plainView.bounds.height)!)
         dropDown.direction = .bottom
         dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
-//          print("Selected item: \(item) at index: \(index)")
             self.typeLabel.text = dataTypeList[index]
             dropDownSelected = index
-            webType = dataTypeList[index]
+            self.typeLabel.text = dataTypeList[index]
             countVal = countWebByType(typeLabel: dataTypeList[index])
         }
         
-        
-        
+        webType = dataTypeList[1]
     }
     
     override func viewDidLayoutSubviews() {
@@ -141,7 +135,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     @objc func refresh (send: UIRefreshControl) {
         DispatchQueue.main.async {
             self.webTableView.reloadData()
-            self.refreshControl.endRefreshing() 
+            self.refreshControl.endRefreshing()
         }
     }
     
@@ -181,8 +175,6 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         
         // cancel button
         let cancelAct = UIAlertAction(title: "取消", style: .cancel, handler: {(action: UIAlertAction!) -> Void in
-//            self.view.showToast(text: "Cancel button pressed!")
-//            print("Cancel button pressed!")
             self.viewDidAppear(true)
         })
         
@@ -201,22 +193,24 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
                 errorFlag = true
             }
             if !errorFlag {
-                print("網站網址是：\(webUrl.text!)")
-                print("網站名稱是：\(webName.text!)")
+//                print("網站網址是：\(webUrl.text!)")
+//                print("網站名稱是：\(webName.text!)")
                 print("網站類型是：\(self.webType)")
             
                 isInserted = DBManager.shared.insertWebInfo(webName: webName.text!, webUrl: webUrl.text!, webType: self.webType)
+                print("--網站類型是：\(self.webType)")
             } else {
                 self.view.showToast(text: "名稱或網址不可為空！")
                 isInserted = false
             }
             if isInserted {
-                print("insert successfully")
-                print(self.webDataList)
+//                print("insert successfully")
+//                print(self.webDataList)
 //                self.webTableView.reloadData()
-                self.viewDidAppear(true)
+                
                 self.countVal = self.countWebByType(typeLabel: "全部")
-                print(self.webDataList)
+                self.viewDidAppear(true)
+//                print(self.webDataList)
             } else {
                 print("insert failed")
             }
@@ -261,7 +255,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             }
             
             if !errorFlag {
-                print("newType: \(newType.text!)")
+//                print("newType: \(newType.text!)")
                 isInserted = DBManager.shared.insertWebType(type: newType.text!)
             } else {
                 self.view.showToast(text: "類別不可為空！")
@@ -271,7 +265,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             if isInserted {
                 print("insert successfully")
                 self.viewDidAppear(true)
-                print(self.dataTypeList)
+//                print(self.dataTypeList)
             } else {
                 print("insert failed")
             }
@@ -299,17 +293,15 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        print("selected row: \(row)")
+//        print("selected row: \(row)")
         webType = pickerViewMenu[row]
     }
     
     func countWebByType(typeLabel: String) -> Int {
         var count: Int = 0
         tableViewList.removeAll()
-        print("tableViewList: \(tableViewList.count)")
         for data in webDataList {
             if data.type == typeLabel {
-                print("for loop data: \(data.type)")
                 tableViewList.append(data)
                 count += 1
             } else if typeLabel == "全部" {
@@ -322,7 +314,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     
     // table view
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(countVal)
+//        print(countVal)
         return countVal
     
     }
@@ -336,16 +328,23 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         cell.bgView.layer.shadowOpacity = 0.3
         cell.bgView.layer.shadowOffset = CGSize(width: 4, height: 5)
         
-        print(" cellForRowAt -> typeLabel: \(typeLabel.text!), index: \(indexPath)")
+//        print(" cellForRowAt -> typeLabel: \(typeLabel.text!), index: \(indexPath)")
         
         // updata webDataList while counting
+//        print("-----------------------")
+//        for data in tableViewList {
+//            print(data.name	)
+//        }
         if typeLabel.text == "全部" {
             cell.webName.text = webDataList[indexPath.row].name
             cell.webType.text = "#" + webDataList[indexPath.row].type
         } else {
+            for data in tableViewList {
+                print(data.type)
+            }
             cell.webName.text = tableViewList[indexPath.row].name
             cell.webType.text = "#" + tableViewList[indexPath.row].type
-            print("webName: \(cell.webName.text!)")
+//            print("webName: \(cell.webName.text!)")
         }
         
         return cell
