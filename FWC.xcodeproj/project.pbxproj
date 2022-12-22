@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -16,6 +16,8 @@
 		CE3CFD8A294AF9740051ECA5 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3CFD83294AF9740051ECA5 /* FMResultSet.m */; };
 		CE3CFD8B294AF9740051ECA5 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3CFD84294AF9740051ECA5 /* FMDatabasePool.m */; };
 		CE3CFD8F294AFA320051ECA5 /* DBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3CFD8E294AFA320051ECA5 /* DBManager.swift */; };
+		CEC8FE4129533AF6006F8160 /* WebInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC8FE4029533AF6006F8160 /* WebInfoTableViewCell.swift */; };
+		CEC8FE4429533BB9006F8160 /* WebInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC8FE4329533BB9006F8160 /* WebInformation.swift */; };
 		CEE936602940D07800945C64 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE9365F2940D07800945C64 /* AppDelegate.swift */; };
 		CEE936622940D07800945C64 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE936612940D07800945C64 /* SceneDelegate.swift */; };
 		CEE936642940D07800945C64 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE936632940D07800945C64 /* ViewController.swift */; };
@@ -44,6 +46,8 @@
 		CE3CFD85294AF9740051ECA5 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
 		CE3CFD86294AF9740051ECA5 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
 		CE3CFD8E294AFA320051ECA5 /* DBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBManager.swift; sourceTree = "<group>"; };
+		CEC8FE4029533AF6006F8160 /* WebInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebInfoTableViewCell.swift; sourceTree = "<group>"; };
+		CEC8FE4329533BB9006F8160 /* WebInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebInformation.swift; sourceTree = "<group>"; };
 		CEE9365C2940D07800945C64 /* FWC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FWC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEE9365F2940D07800945C64 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CEE936612940D07800945C64 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -74,7 +78,6 @@
 				1F4E80B43D5859B4636E9F20 /* Pods-FWC.debug.xcconfig */,
 				F190B7D3C9655F2B3E6AF006 /* Pods-FWC.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -147,6 +150,8 @@
 				CEE9366D2940D07900945C64 /* Info.plist */,
 				CEE936812940DA7600945C64 /* SideMenuViewController.swift */,
 				CE3CFD8E294AFA320051ECA5 /* DBManager.swift */,
+				CEC8FE4029533AF6006F8160 /* WebInfoTableViewCell.swift */,
+				CEC8FE4329533BB9006F8160 /* WebInformation.swift */,
 			);
 			path = FWC;
 			sourceTree = "<group>";
@@ -269,8 +274,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				CEE936822940DA7600945C64 /* SideMenuViewController.swift in Sources */,
+				CEC8FE4129533AF6006F8160 /* WebInfoTableViewCell.swift in Sources */,
 				CEE936642940D07800945C64 /* ViewController.swift in Sources */,
 				CEE936602940D07800945C64 /* AppDelegate.swift in Sources */,
+				CEC8FE4429533BB9006F8160 /* WebInformation.swift in Sources */,
 				CE3CFD89294AF9740051ECA5 /* FMDatabaseQueue.m in Sources */,
 				CE3CFD8B294AF9740051ECA5 /* FMDatabasePool.m in Sources */,
 				CE3CFD8F294AFA320051ECA5 /* DBManager.swift in Sources */,

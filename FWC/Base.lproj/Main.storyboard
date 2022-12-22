@@ -55,6 +55,44 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="xmu-SJ-2cY">
                                 <rect key="frame" x="0.0" y="168" width="414" height="694"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="WebCell" rowHeight="80" id="hjH-sy-dtm" customClass="WebInfoTableViewCell" customModule="FWC" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="414" height="80"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="hjH-sy-dtm" id="bsT-YQ-0EW">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="80"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2fa-i5-Raj">
+                                                    <rect key="frame" x="40" y="16" width="334" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="3sW-Le-CbD"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XmX-hO-CNu">
+                                                    <rect key="frame" x="40" y="48" width="42" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="XmX-hO-CNu" firstAttribute="top" secondItem="2fa-i5-Raj" secondAttribute="bottom" constant="11" id="2XC-fF-Jaj"/>
+                                                <constraint firstItem="2fa-i5-Raj" firstAttribute="leading" secondItem="XmX-hO-CNu" secondAttribute="leading" id="8d3-Hs-gwh"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="2fa-i5-Raj" secondAttribute="trailing" constant="20" id="CfS-Iu-UmX"/>
+                                                <constraint firstItem="2fa-i5-Raj" firstAttribute="leading" secondItem="bsT-YQ-0EW" secondAttribute="leadingMargin" constant="20" id="Xxi-X1-LRq"/>
+                                                <constraint firstItem="2fa-i5-Raj" firstAttribute="top" secondItem="bsT-YQ-0EW" secondAttribute="topMargin" constant="5" id="v9y-Ft-33h"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="webName" destination="2fa-i5-Raj" id="C5z-lp-11y"/>
+                                            <outlet property="webType" destination="XmX-hO-CNu" id="aNj-Z8-dQr"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -76,6 +114,7 @@
                     <connections>
                         <outlet property="dropDownView" destination="coH-NY-2fU" id="49I-vT-s4h"/>
                         <outlet property="typeLabel" destination="fpp-oT-isM" id="BV3-Jg-min"/>
+                        <outlet property="webTableView" destination="xmu-SJ-2cY" id="xyZ-Bc-J5V"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

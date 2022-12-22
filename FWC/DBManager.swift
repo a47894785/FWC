@@ -84,12 +84,13 @@ class DBManager: NSObject {
         return false
     }
     
-    func showWebInfoTable()  {
+    func showWebInfoTable() -> [WebInformation] {
+        var webDataList :[WebInformation] = []
         if openDB() {
             let query = "select * from webInfo"
             
             do {
-                print("---webInfo---")
+//                print("---webInfo---")
                 let results = try database.executeQuery(query, values: nil)
                 
                 while results.next() {
@@ -98,13 +99,18 @@ class DBManager: NSObject {
                     let webUrl = results.string(forColumn: "url")
                     let webType = results.string(forColumn: "type")
                     
-                    print("---------------\nwebID: \(webID) \nwebName: \(webName!) \nwebUrl: \(webUrl!) \nwebType: \(webType!)")
+//                    print("---------------\nwebID: \(webID) \nwebName: \(webName!) \nwebUrl: \(webUrl!) \nwebType: \(webType!)")
+                    
+                    let webData = WebInformation(id: Int(webID), name: webName!, url: webUrl!, type: webType!)
+                    webDataList.append(webData)
+                    
                 }
             } catch {
                 print(error.localizedDescription)
             }
         }
         database.close()
+        return webDataList
     }
     
 }
