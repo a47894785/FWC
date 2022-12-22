@@ -15,6 +15,8 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     
     @IBOutlet weak var webTableView: UITableView!
     
+    @IBOutlet weak var addNewTypeBtn: UIButton!
+    
     // drop down menu outlets
     @IBOutlet weak var dropDownView: UIView!
     @IBOutlet weak var typeLabel: UILabel!
@@ -58,10 +60,15 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
+        addNewTypeBtn.layer.cornerRadius = 15
+        
         refreshControl.addTarget(self, action: #selector(refresh), for: UIControl.Event.valueChanged)
         webTableView.addSubview(refreshControl)
         
         typeLabel.text = "全部"
+
+        webTableView.separatorStyle = .none
+        webTableView.showsVerticalScrollIndicator = false
         
         view.addSubview(addBtn)
         addBtn.addTarget(self, action: #selector(addNewWeb), for: .touchUpInside	)
@@ -93,7 +100,22 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        webTableView.separatorStyle = .none
+        webTableView.showsVerticalScrollIndicator = false
         
+        dataTypeList = DBManager.shared.getWebTypeInfo()
+        dataTypeList.insert("全部", at: 0)
+        webDataList = DBManager.shared.showWebInfoTable()
+        
+        pickerViewMenu = Array(dataTypeList[1 ... dataTypeList.count - 1])
+        print(pickerViewMenu)
+        
+        webDataList = DBManager.shared.showWebInfoTable()
+        if webDataList.count != 0 {
+            countVal = webDataList.count
+        }
+        
+        dropDownView.layer.cornerRadius = 15
         dropDown.anchorView = dropDownView
         dropDown.dataSource = dataTypeList
         dropDown.bottomOffset = CGPoint(x: 0, y: (dropDown.anchorView?.plainView.bounds.height)!)
@@ -108,11 +130,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         }
         
         
-        webDataList = DBManager.shared.showWebInfoTable()
-        if webDataList.count != 0 {
-//            print(webDataList[0].name)
-        }
-//        print("-")
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -163,23 +181,35 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         
         // cancel button
         let cancelAct = UIAlertAction(title: "取消", style: .cancel, handler: {(action: UIAlertAction!) -> Void in
-            print("Cancel button pressed!")
+//            self.view.showToast(text: "Cancel button pressed!")
+//            print("Cancel button pressed!")
             self.viewDidAppear(true)
         })
         
         
         // confirm button
         let confirmAct = UIAlertAction(title: "確認", style: .default, handler: {(UIAlertAction) -> Void in
+            
+            var errorFlag: Bool = false
+            var isInserted: Bool
+            
             let webName = (alertController.textFields?.first)! as UITextField
             
             let webUrl = (alertController.textFields?.last)! as UITextField
             
-            print("網站網址是：\(webUrl.text!)")
-            print("網站名稱是：\(webName.text!)")
-            print("網站類型是：\(self.webType)")
+            if webName.text! == "" || webUrl.text! == "" {
+                errorFlag = true
+            }
+            if !errorFlag {
+                print("網站網址是：\(webUrl.text!)")
+                print("網站名稱是：\(webName.text!)")
+                print("網站類型是：\(self.webType)")
             
-            let isInserted = DBManager.shared.insertWebInfo(webName: webName.text!, webUrl: webUrl.text!, webType: self.webType)
-            
+                isInserted = DBManager.shared.insertWebInfo(webName: webName.text!, webUrl: webUrl.text!, webType: self.webType)
+            } else {
+                self.view.showToast(text: "名稱或網址不可為空！")
+                isInserted = false
+            }
             if isInserted {
                 print("insert successfully")
                 print(self.webDataList)
@@ -194,6 +224,61 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         })
         
         alertController.view.addSubview(pickerFrame)
+        alertController.addAction(confirmAct)
+        alertController.addAction(cancelAct)
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    
+    @IBAction func addNewType(_ sender: Any) {
+        let alertController = UIAlertController(title: "新增類別", message: "", preferredStyle: .alert)
+        
+        // text input
+        alertController.addTextField(configurationHandler: {
+            (textField: UITextField) -> Void in
+            textField.placeholder = "輸入類別"
+            textField.font = UIFont(name: "", size: 24)
+        })
+        
+        // cancel button
+        let cancelAct = UIAlertAction(title: "取消", style: .cancel, handler: {(action: UIAlertAction!) -> Void in
+//            self.view.showToast(text: "Cancel button pressed!")
+//            print("Cancel button pressed!")
+            self.viewDidAppear(true)
+        })
+        
+        // confirm button
+        let confirmAct = UIAlertAction(title: "確認", style: .default, handler: {(UIAlertAction) -> Void in
+            
+            var errorFlag: Bool = false
+            var isInserted: Bool
+            
+            let newType = alertController.textFields![0] as UITextField
+            
+            if newType.text  == "" {
+                errorFlag = true
+            }
+            
+            if !errorFlag {
+                print("newType: \(newType.text!)")
+                isInserted = DBManager.shared.insertWebType(type: newType.text!)
+            } else {
+                self.view.showToast(text: "類別不可為空！")
+                isInserted = false
+            }
+            
+            if isInserted {
+                print("insert successfully")
+                self.viewDidAppear(true)
+                print(self.dataTypeList)
+            } else {
+                print("insert failed")
+            }
+            
+            self.viewDidAppear(true)
+        })
+        
         alertController.addAction(confirmAct)
         alertController.addAction(cancelAct)
         
@@ -245,15 +330,21 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = webTableView.dequeueReusableCell(withIdentifier: "WebCell", for: indexPath) as! WebInfoTableViewCell
+        
+        cell.bgView.layer.cornerRadius = 15
+        cell.bgView.layer.shadowRadius = 5
+        cell.bgView.layer.shadowOpacity = 0.3
+        cell.bgView.layer.shadowOffset = CGSize(width: 4, height: 5)
+        
         print(" cellForRowAt -> typeLabel: \(typeLabel.text!), index: \(indexPath)")
         
         // updata webDataList while counting
         if typeLabel.text == "全部" {
             cell.webName.text = webDataList[indexPath.row].name
-            cell.webType.text = webDataList[indexPath.row].type
+            cell.webType.text = "#" + webDataList[indexPath.row].type
         } else {
             cell.webName.text = tableViewList[indexPath.row].name
-            cell.webType.text = tableViewList[indexPath.row].type
+            cell.webType.text = "#" + tableViewList[indexPath.row].type
             print("webName: \(cell.webName.text!)")
         }
         
@@ -261,6 +352,52 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80.0
+        return 100.0
     }
+}
+
+extension UIView {
+    func showToast(text: String){
+            
+            self.hideToast()
+            let toastLb = UILabel()
+            toastLb.numberOfLines = 0
+            toastLb.lineBreakMode = .byWordWrapping
+            toastLb.backgroundColor = UIColor.black.withAlphaComponent(0.7)
+            toastLb.textColor = UIColor.white
+            toastLb.layer.cornerRadius = 10.0
+            toastLb.textAlignment = .center
+            toastLb.font = UIFont.systemFont(ofSize: 15.0)
+            toastLb.text = text
+            toastLb.layer.masksToBounds = true
+            toastLb.tag = 9999//tag：hideToast實用來判斷要remove哪個label
+            
+            let maxSize = CGSize(width: self.bounds.width - 40, height: self.bounds.height)
+            var expectedSize = toastLb.sizeThatFits(maxSize)
+            var lbWidth = maxSize.width
+            var lbHeight = maxSize.height
+            if maxSize.width >= expectedSize.width{
+                lbWidth = expectedSize.width
+            }
+            if maxSize.height >= expectedSize.height{
+                lbHeight = expectedSize.height
+            }
+            expectedSize = CGSize(width: lbWidth, height: lbHeight)
+            toastLb.frame = CGRect(x: ((self.bounds.size.width)/2) - ((expectedSize.width + 20)/2), y: self.bounds.height - expectedSize.height - 40 - 20, width: expectedSize.width + 20, height: expectedSize.height + 20)
+            self.addSubview(toastLb)
+            
+            UIView.animate(withDuration: 1.5, delay: 1.5, animations: {
+                toastLb.alpha = 0.0
+            }) { (complete) in
+                toastLb.removeFromSuperview()
+            }
+        }
+        
+        func hideToast(){
+            for view in self.subviews{
+                if view is UILabel , view.tag == 9999{
+                    view.removeFromSuperview()
+                }
+            }
+        }
 }

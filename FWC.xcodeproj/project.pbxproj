@@ -25,6 +25,9 @@
 		CEE936692940D07900945C64 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CEE936682940D07900945C64 /* Assets.xcassets */; };
 		CEE9366C2940D07900945C64 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CEE9366A2940D07900945C64 /* LaunchScreen.storyboard */; };
 		CEE936822940DA7600945C64 /* SideMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE936812940DA7600945C64 /* SideMenuViewController.swift */; };
+		CEF549302954A06E0064F8FD /* icons8-sum-96.png in Resources */ = {isa = PBXBuildFile; fileRef = CEF5492F2954A06E0064F8FD /* icons8-sum-96.png */; };
+		CEF549332954A1870064F8FD /* add-image.png in Resources */ = {isa = PBXBuildFile; fileRef = CEF549322954A1870064F8FD /* add-image.png */; };
+		CEF549362954B18C0064F8FD /* downward-arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = CEF549352954B18C0064F8FD /* downward-arrow.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,6 +60,9 @@
 		CEE9366B2940D07900945C64 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CEE9366D2940D07900945C64 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CEE936812940DA7600945C64 /* SideMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuViewController.swift; sourceTree = "<group>"; };
+		CEF5492F2954A06E0064F8FD /* icons8-sum-96.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icons8-sum-96.png"; sourceTree = "<group>"; };
+		CEF549322954A1870064F8FD /* add-image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add-image.png"; sourceTree = "<group>"; };
+		CEF549352954B18C0064F8FD /* downward-arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "downward-arrow.png"; sourceTree = "<group>"; };
 		F190B7D3C9655F2B3E6AF006 /* Pods-FWC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FWC.release.xcconfig"; path = "Target Support Files/Pods-FWC/Pods-FWC.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -84,8 +90,11 @@
 		CE00C5822949FD9D009B060D /* images */ = {
 			isa = PBXGroup;
 			children = (
+				CEF549352954B18C0064F8FD /* downward-arrow.png */,
+				CEF5492F2954A06E0064F8FD /* icons8-sum-96.png */,
 				CE00C586294A0098009B060D /* icons8-add-64.png */,
 				CE00C5832949FDCD009B060D /* LaunchScreen.png */,
+				CEF549322954A1870064F8FD /* add-image.png */,
 			);
 			path = images;
 			sourceTree = "<group>";
@@ -216,10 +225,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CEF549332954A1870064F8FD /* add-image.png in Resources */,
 				CEE9366C2940D07900945C64 /* LaunchScreen.storyboard in Resources */,
 				CEE936692940D07900945C64 /* Assets.xcassets in Resources */,
+				CEF549362954B18C0064F8FD /* downward-arrow.png in Resources */,
 				CE00C5842949FDCD009B060D /* LaunchScreen.png in Resources */,
 				CE00C587294A0098009B060D /* icons8-add-64.png in Resources */,
+				CEF549302954A06E0064F8FD /* icons8-sum-96.png in Resources */,
 				CEE936672940D07800945C64 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

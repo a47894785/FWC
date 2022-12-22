@@ -107,6 +107,21 @@ class DBManager: NSObject {
         return typeList
     }
     
+    func insertWebType(type: String) -> Bool  {
+        if openDB() {
+            let query = "insert into webTypeTb (type) values ('\(type)');"
+            
+            if !database.executeStatements(query) {
+                print("failed to insert")
+                print(database.lastError(), database.lastErrorMessage())
+                return false
+            }
+        }
+        
+        database.close()
+        return true
+    }
+    
     func insertWebInfo(webName:String, webUrl:String, webType:String) ->  Bool {
         if openDB() {
             print("ready to insert")

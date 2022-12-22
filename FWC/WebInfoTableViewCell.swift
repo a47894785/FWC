@@ -12,6 +12,8 @@ class WebInfoTableViewCell: UITableViewCell {
     @IBOutlet weak var webName: UILabel!
     @IBOutlet weak var webType: UILabel!
     
+    @IBOutlet weak var bgView: UIView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
