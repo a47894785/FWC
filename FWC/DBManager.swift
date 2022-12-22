@@ -29,11 +29,17 @@ class DBManager: NSObject {
             if database != nil {
                 // open database
                 if database.open() {
-                    let createTypeTable = "create table webInfo (webID integer primary key autoincrement not null, name text not null, url text not null, type text not null)"
+                    let createWebInfoTable = "create table webInfo (webID integer primary key autoincrement not null, name text not null, url text not null, type text not null)"
+                    
+                    let createWebTypeTable = "create table webTypeTb (type text primary key not null)"
                     
                     do {
-                        try database.executeUpdate(createTypeTable, values: nil)
-                        created = true
+                        try database.executeUpdate(createWebInfoTable, values: nil)
+                        try database.executeUpdate(createWebTypeTable, values: nil)
+                        if self.typeTableInit() {
+                            print("create webType table successfully")
+                            created = true
+                        }
                     } catch {
                         print("Could not open the database")
                         print(error.localizedDescription)
@@ -66,6 +72,39 @@ class DBManager: NSObject {
         }
         print("open database failed")
         return false
+    }
+    
+    func typeTableInit() -> Bool {
+        if openDB() {
+            let query = "insert into webTypeTb (type) values ('一般');"
+            if !database.executeStatements(query) {
+                print("failed to initialize webType table")
+                return false
+            }
+            
+            database.close()
+            return true
+        }
+        return false
+    }
+    
+    func getWebTypeInfo() -> [String] {
+        var typeList: [String] = []
+        if openDB() {
+            let query = "select * from webTypeTb"
+            
+            do {
+                let results = try database.executeQuery(query, values: nil)
+                while results.next() {
+                    let type = results.string(forColumn: "type")
+                    typeList.append(type!)
+                }
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+        database.close()
+        return typeList
     }
     
     func insertWebInfo(webName:String, webUrl:String, webType:String) ->  Bool {

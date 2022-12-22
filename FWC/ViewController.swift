@@ -19,11 +19,13 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     @IBOutlet weak var dropDownView: UIView!
     @IBOutlet weak var typeLabel: UILabel!
     let dropDown = DropDown()
-    let dropDownMenu = ["全部", "一般", "實習", "研究所", "政府", "學校"]
+//    var dropDownMenu = ["全部", "一般", "實習", "研究所", "政府", "學校"]
+    var dataTypeList: [String] = []
     var dropDownSelected: Int = 0
     
     // picker view
-    var pickerViewMenu = ["一般", "實習", "研究所", "政府", "學校"]
+//    var pickerViewMenu = ["一般", "實習", "研究所", "政府", "學校"]
+    var pickerViewMenu: [String] = []
     var pickerView = UIPickerView()
     var webType:String = "一般"
     
@@ -58,9 +60,12 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         
         refreshControl.addTarget(self, action: #selector(refresh), for: UIControl.Event.valueChanged)
         webTableView.addSubview(refreshControl)
+        
         typeLabel.text = "全部"
+        
         view.addSubview(addBtn)
         addBtn.addTarget(self, action: #selector(addNewWeb), for: .touchUpInside	)
+        
         let isCreated = DBManager.shared.createDB()
 //        print(isCreated)
         let openDB = DBManager.shared.openDB()
@@ -69,6 +74,16 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         webTableView.tableFooterView = UIView(frame: .zero)
         webTableView.delegate = self
         webTableView.dataSource = self
+        
+        /* --------- need to reload --------- */
+        
+        dataTypeList = DBManager.shared.getWebTypeInfo()
+        dataTypeList.insert("全部", at: 0)
+        for data in dataTypeList {
+            print(data)
+        }
+        pickerViewMenu = Array(dataTypeList[1 ... dataTypeList.count - 1])
+        print(pickerViewMenu)
         
         webDataList = DBManager.shared.showWebInfoTable()
         if webDataList.count != 0 {
@@ -80,17 +95,19 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         super.viewDidAppear(animated)
         
         dropDown.anchorView = dropDownView
-        dropDown.dataSource = dropDownMenu
+        dropDown.dataSource = dataTypeList
         dropDown.bottomOffset = CGPoint(x: 0, y: (dropDown.anchorView?.plainView.bounds.height)!)
         dropDown.topOffset = CGPoint(x: 0, y: -(dropDown.anchorView?.plainView.bounds.height)!)
         dropDown.direction = .bottom
         dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
 //          print("Selected item: \(item) at index: \(index)")
-            self.typeLabel.text = dropDownMenu[index]
+            self.typeLabel.text = dataTypeList[index]
             dropDownSelected = index
-            webType = dropDownMenu[index]
-            countVal = countWebByType(typeLabel: dropDownMenu[index])
+            webType = dataTypeList[index]
+            countVal = countWebByType(typeLabel: dataTypeList[index])
         }
+        
+        
         webDataList = DBManager.shared.showWebInfoTable()
         if webDataList.count != 0 {
 //            print(webDataList[0].name)
