@@ -29,15 +29,15 @@ class DBManager: NSObject {
             if database != nil {
                 // open database
                 if database.open() {
-                    let createWebInfoTable = "create table webInfo (webID integer primary key autoincrement not null, name text not null, url text not null, type text not null)"
+                    let createWebInfoTable = "create table webInfo (webID integer primary key autoincrement not null, name text not null, url text unique not null, type text not null)"
                     
                     let createWebTypeTable = "create table webTypeTb (type text primary key not null)"
                     
                     do {
                         try database.executeUpdate(createWebInfoTable, values: nil)
                         try database.executeUpdate(createWebTypeTable, values: nil)
-                        if self.typeTableInit() {
-                            print("create webType table successfully")
+                        if self.typeTableInit() && self.webInfoTableInit() {
+                            print("create webType & webInfo table successfully")
                             created = true
                         }
                     } catch {
@@ -66,11 +66,26 @@ class DBManager: NSObject {
         
         if database != nil {
             if database.open() {
-                print("open database")
+//                print("open database")
                 return true
             }
         }
-        print("open database failed")
+//        print("open database failed")
+        return false
+    }
+    
+    func webInfoTableInit() -> Bool {
+        if openDB() {
+            let query = "insert into webInfo (webID, name, url, type) values (null, 'FCU','https://www.fcu.edu.tw/', '一般');"
+            if !database.executeStatements(query) {
+//                print("failed to insert")
+                print(database.lastError(), database.lastErrorMessage())
+                return false
+            }
+            
+            database.close()
+            return true
+        }
         return false
     }
     
@@ -153,7 +168,6 @@ class DBManager: NSObject {
                     let webUrl = results.string(forColumn: "url")
                     let webType = results.string(forColumn: "type")
                     
-//                    print("---------------\nwebID: \(webID) \nwebName: \(webName!) \nwebUrl: \(webUrl!) \nwebType: \(webType!)")
                     
                     let webData = WebInformation(id: Int(webID), name: webName!, url: webUrl!, type: webType!)
                     webDataList.append(webData)
@@ -165,6 +179,35 @@ class DBManager: NSObject {
         }
         database.close()
         return webDataList
+    }
+    
+    func deleteWeb(webID: Int) -> Bool {
+        if openDB() {
+            let query = "delete from webInfo where webID='\(webID)'"
+            
+            if !database.executeStatements(query) {
+//                print("failed to insert")
+                print(database.lastError(), database.lastErrorMessage())
+                return false
+            }
+            database.close()
+            return true
+        }
+        return false
+    }
+    
+    func updateWebData(webID: Int, newWebName: String, newWebUrl: String) -> Bool {
+        if openDB() {
+            let query = "update webInfo set name='\(newWebName)', url='\(newWebUrl)' where webID='\(webID)';"
+            
+            if !database.executeStatements(query) {
+                print(database.lastError(), database.lastErrorMessage())
+                return false
+            }
+            database.close()
+            return true
+        }
+        return false
     }
     
 }

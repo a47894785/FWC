@@ -58,6 +58,21 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
+        
+        // --- gesture recognizer ---
+        // long press
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressHandler))
+        longPress.minimumPressDuration = 0.5
+        self.webTableView.addGestureRecognizer(longPress)
+        // one tap
+        let oneTap = UITapGestureRecognizer(target: self, action: #selector(tapHandler))
+        oneTap.numberOfTapsRequired = 1
+        self.webTableView.addGestureRecognizer(oneTap)
+        // swipe left
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(swipeLeftHandler))
+        swipeLeft.direction = .left
+        self.webTableView.addGestureRecognizer(swipeLeft)
+        
         addNewTypeBtn.layer.cornerRadius = 15
         
         refreshControl.addTarget(self, action: #selector(refresh), for: UIControl.Event.valueChanged)
@@ -122,6 +137,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             dropDownSelected = index
             self.typeLabel.text = dataTypeList[index]
             countVal = countWebByType(typeLabel: dataTypeList[index])
+            self.autoFresh()
         }
         
         webType = dataTypeList[1]
@@ -139,15 +155,160 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         }
     }
     
+    func autoFresh() {
+        DispatchQueue.main.async {
+            self.webTableView.reloadData()
+        }
+    }
+    
+    // handle swipe left gesture
+    @objc func swipeLeftHandler(swipeLeft: UISwipeGestureRecognizer) {
+        let p = swipeLeft.location(in: self.webTableView)
+        let indexPath = self.webTableView.indexPathForRow(at: p)
+        if indexPath == nil {
+            print("swipe left on table view, not row")
+        } else if swipeLeft.direction == .left {
+            print("swipe left on row, at \(indexPath!.row)")
+            
+            // alert controller
+            let alertController = UIAlertController(title: "確定要刪除網站嗎", message: "點選確認以刪除網站", preferredStyle: .alert)
+            
+            // cancel button
+            let cancelAct = UIAlertAction(title: "取消", style: .cancel, handler: {(action: UIAlertAction!) -> Void in
+            })
+
+
+            // confirm button
+            let confirmAct = UIAlertAction(title: "確認", style: .default, handler: {(UIAlertAction) -> Void in
+                let isDeleted = DBManager.shared.deleteWeb(webID: self.tableViewList[indexPath!.row].id)
+                
+                if isDeleted {
+                    self.view.showToast(text: "成功刪除\(self.tableViewList[indexPath!.row].name)")
+                }
+                self.viewDidAppear(true)
+                self.autoFresh()
+            })
+            alertController.addAction(confirmAct)
+            alertController.addAction(cancelAct)
+            
+            self.present(alertController, animated: true, completion: nil)
+        }
+        self.viewDidAppear(true)
+    }
+    
+    // handle tap gesture
+    @objc func tapHandler(oneTap: UITapGestureRecognizer) {
+        
+        let p = oneTap.location(in: self.webTableView)
+        let indexPath = self.webTableView.indexPathForRow(at: p)
+//        print("one tap !! \(indexPath!.row)")
+        if indexPath == nil {
+            print("tap on table view, not row")
+        } else {
+            print("tap on row, at \(tableViewList[indexPath!.row].name)")
+            let url = URL(string: tableViewList[indexPath!.row].url)!
+            UIApplication.shared.open(url)
+        }
+    }
+    
+    // handle long press gesture
+    @objc func longPressHandler(longPress: UILongPressGestureRecognizer) {
+        let p = longPress.location(in: self.webTableView)
+        let indexPath = self.webTableView.indexPathForRow(at: p)
+//        print("one tap !! \(indexPath!.row)")
+        if indexPath == nil {
+            print("long press on table view, not row")
+        } else if longPress.state == UIGestureRecognizer.State.began {
+            
+            
+            print("long press on row, at \(tableViewList[indexPath!.row].name)")
+            
+            let alertController = UIAlertController(title: "更新網站資訊", message: "請輸入要更新的網址及名稱", preferredStyle: .alert)
+            
+            
+            // text input
+            alertController.addTextField(configurationHandler: {
+                (textField: UITextField) -> Void in
+                textField.text = self.tableViewList[indexPath!.row].name
+                textField.font = UIFont(name: "", size: 24)
+            })
+
+            alertController.addTextField(configurationHandler: {
+                (textField: UITextField) -> Void in
+                textField.text = self.tableViewList[indexPath!.row].url
+                textField.font = UIFont(name: "", size: 24)
+            })
+            
+            
+            // cancel button
+            let cancelAct = UIAlertAction(title: "取消", style: .cancel, handler: {(action: UIAlertAction!) -> Void in
+            })
+
+
+            // confirm button
+            let confirmAct = UIAlertAction(title: "確認", style: .default, handler: {(UIAlertAction) -> Void in
+                
+                var errorFlag: Bool = false
+                var urlError: Bool = false
+                var isUpdated: Bool
+                
+                let newWebName = (alertController.textFields?.first)! as UITextField
+                
+                let newWebUrl = (alertController.textFields?.last)! as UITextField
+                
+                if newWebName.text! == "" || newWebUrl.text! == "" {
+                    errorFlag = true
+                } else {
+                    // call verify url
+                    urlError = self.verifyUrl(urlString: newWebUrl.text!)
+                    
+                }
+                
+                if !errorFlag && urlError {
+                    isUpdated = DBManager.shared.updateWebData(webID: self.tableViewList[indexPath!.row].id, newWebName: newWebName.text!, newWebUrl: newWebUrl.text!)
+                    
+                } else if errorFlag {
+                    self.view.showToast(text: "名稱或網址不可為空！")
+                    isUpdated = false
+                } else {
+                    self.view.showToast(text: "無效的網址！")
+                    isUpdated = false
+                }
+                
+                if isUpdated {
+                    self.view.showToast(text: "網站更新成功，若無更新畫面，請下拉刷新！")
+                    
+                    self.countVal = self.countWebByType(typeLabel: "全部")
+                    self.viewDidAppear(true)
+                    self.autoFresh()
+                } else {
+                    print("insert failed")
+                }
+                self.viewDidAppear(true)
+            })
+            
+            
+            alertController.addAction(confirmAct)
+            alertController.addAction(cancelAct)
+            
+            self.present(alertController, animated: true, completion: nil)
+        }
+        self.viewDidAppear(true)
+    }
+    
+    func verifyUrl(urlString: String?) -> Bool {
+        if let urlString = urlString {
+               if let url = NSURL(string: urlString) {
+                   return UIApplication.shared.canOpenURL(url as URL)
+               }
+           }
+       return false
+    }
+    
     
     @IBAction func showDropMenu(_ sender: Any) {
         dropDown.show()
     }
-    
-//    @IBAction func navegateToWebsite(_ sender: Any) {
-//        DBManager.shared.showWebInfoTable()
-//        self.viewDidAppear(true)
-//    }
     
     
     @objc private func addNewWeb(_ sender: Any) {
@@ -183,6 +344,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         let confirmAct = UIAlertAction(title: "確認", style: .default, handler: {(UIAlertAction) -> Void in
             
             var errorFlag: Bool = false
+            var urlError: Bool = false
             var isInserted: Bool
             
             let webName = (alertController.textFields?.first)! as UITextField
@@ -191,26 +353,33 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             
             if webName.text! == "" || webUrl.text! == "" {
                 errorFlag = true
+            } else {
+                // call verify url
+                urlError = self.verifyUrl(urlString: webUrl.text!)
+                
             }
-            if !errorFlag {
+            
+            if !errorFlag && urlError {
 //                print("網站網址是：\(webUrl.text!)")
 //                print("網站名稱是：\(webName.text!)")
-                print("網站類型是：\(self.webType)")
+//                print("網站類型是：\(self.webType)")
             
                 isInserted = DBManager.shared.insertWebInfo(webName: webName.text!, webUrl: webUrl.text!, webType: self.webType)
-                print("--網站類型是：\(self.webType)")
-            } else {
+//                print("--網站類型是：\(self.webType)")
+            } else if errorFlag {
                 self.view.showToast(text: "名稱或網址不可為空！")
                 isInserted = false
+            } else {
+                self.view.showToast(text: "無效的網址！")
+                isInserted = false
             }
+            
             if isInserted {
-//                print("insert successfully")
-//                print(self.webDataList)
-//                self.webTableView.reloadData()
+                self.view.showToast(text: "網站新增成功，若無更新畫面，請下拉刷新！")
                 
                 self.countVal = self.countWebByType(typeLabel: "全部")
                 self.viewDidAppear(true)
-//                print(self.webDataList)
+                self.autoFresh()
             } else {
                 print("insert failed")
             }
@@ -263,7 +432,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             }
             
             if isInserted {
-                print("insert successfully")
+                self.view.showToast(text: "類別新增成功")
                 self.viewDidAppear(true)
 //                print(self.dataTypeList)
             } else {
@@ -327,14 +496,8 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         cell.bgView.layer.shadowRadius = 5
         cell.bgView.layer.shadowOpacity = 0.3
         cell.bgView.layer.shadowOffset = CGSize(width: 4, height: 5)
+        cell.selectionStyle = .none
         
-//        print(" cellForRowAt -> typeLabel: \(typeLabel.text!), index: \(indexPath)")
-        
-        // updata webDataList while counting
-//        print("-----------------------")
-//        for data in tableViewList {
-//            print(data.name	)
-//        }
         if typeLabel.text == "全部" {
             cell.webName.text = webDataList[indexPath.row].name
             cell.webType.text = "#" + webDataList[indexPath.row].type
