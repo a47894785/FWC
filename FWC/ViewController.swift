@@ -27,7 +27,8 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     // picker view
     var pickerViewMenu: [String] = []
     var pickerView = UIPickerView()
-    var webType:String = "一般"
+    var webType: String = "一般"
+    var updateMode: Bool = false
     
     var webDataList: [WebInformation] = []
     var tableViewList: [WebInformation] = []
@@ -140,7 +141,9 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             self.autoFresh()
         }
         
-        webType = dataTypeList[1]
+        if !updateMode {
+            webType = dataTypeList[1]
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -215,15 +218,17 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     @objc func longPressHandler(longPress: UILongPressGestureRecognizer) {
         let p = longPress.location(in: self.webTableView)
         let indexPath = self.webTableView.indexPathForRow(at: p)
-//        print("one tap !! \(indexPath!.row)")
         if indexPath == nil {
             print("long press on table view, not row")
         } else if longPress.state == UIGestureRecognizer.State.began {
             
             
             print("long press on row, at \(tableViewList[indexPath!.row].name)")
+            updateMode = true
+            self.webType = self.tableViewList[indexPath!.row].type
+            print(self.webType)
             
-            let alertController = UIAlertController(title: "更新網站資訊", message: "請輸入要更新的網址及名稱", preferredStyle: .alert)
+            let alertController = UIAlertController(title: "更新網站資訊", message: "請輸入要更新的網址及名稱\n\n\n", preferredStyle: .alert)
             
             
             // text input
@@ -239,6 +244,13 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
                 textField.font = UIFont(name: "", size: 24)
             })
             
+            // picker view
+            let pickerFrame = UIPickerView(frame: CGRect(x: 10, y: 60, width: 250, height: 80))
+            print(pickerViewMenu.firstIndex(of: webType)!)
+            pickerFrame.setValue(UIColor.orange, forKey: "textColor")
+            pickerFrame.dataSource = self
+            pickerFrame.delegate = self
+            pickerFrame.selectRow(pickerViewMenu.firstIndex(of: webType)!, inComponent: 0, animated: true)
             
             // cancel button
             let cancelAct = UIAlertAction(title: "取消", style: .cancel, handler: {(action: UIAlertAction!) -> Void in
@@ -253,8 +265,8 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
                 var isUpdated: Bool
                 
                 let newWebName = (alertController.textFields?.first)! as UITextField
-                
                 let newWebUrl = (alertController.textFields?.last)! as UITextField
+                
                 
                 if newWebName.text! == "" || newWebUrl.text! == "" {
                     errorFlag = true
@@ -264,9 +276,11 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
                     
                 }
                 
+                
                 if !errorFlag && urlError {
-                    isUpdated = DBManager.shared.updateWebData(webID: self.tableViewList[indexPath!.row].id, newWebName: newWebName.text!, newWebUrl: newWebUrl.text!)
-                    
+                    print("webType before update: \(self.webType)")
+                    isUpdated = DBManager.shared.updateWebData(webID: self.tableViewList[indexPath!.row].id, newWebName: newWebName.text!, newWebUrl: newWebUrl.text!, newWebType: self.webType)
+                    self.updateMode = false
                 } else if errorFlag {
                     self.view.showToast(text: "名稱或網址不可為空！")
                     isUpdated = false
@@ -287,7 +301,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
                 self.viewDidAppear(true)
             })
             
-            
+            alertController.view.addSubview(pickerFrame)
             alertController.addAction(confirmAct)
             alertController.addAction(cancelAct)
             
@@ -458,6 +472,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+//        print("picker view row: \(row)")
         return pickerViewMenu[row]
     }
     

@@ -196,9 +196,9 @@ class DBManager: NSObject {
         return false
     }
     
-    func updateWebData(webID: Int, newWebName: String, newWebUrl: String) -> Bool {
+    func updateWebData(webID: Int, newWebName: String, newWebUrl: String, newWebType: String) -> Bool {
         if openDB() {
-            let query = "update webInfo set name='\(newWebName)', url='\(newWebUrl)' where webID='\(webID)';"
+            let query = "update webInfo set name='\(newWebName)', url='\(newWebUrl)', type='\(newWebType)' where webID='\(webID)';"
             
             if !database.executeStatements(query) {
                 print(database.lastError(), database.lastErrorMessage())
