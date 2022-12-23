@@ -11,33 +11,41 @@ import DropDown
 
 class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource {
     
-    // table view outlets
-    
+// ==== table view section ====
     @IBOutlet weak var webTableView: UITableView!
-    
     @IBOutlet weak var addNewTypeBtn: UIButton!
-    
-    // drop down menu outlets
-    @IBOutlet weak var dropDownView: UIView!
-    @IBOutlet weak var typeLabel: UILabel!
-    let dropDown = DropDown()
-    var dataTypeList: [String] = []
-    var dropDownSelected: Int = 0
-    
-    // picker view
-    var pickerViewMenu: [String] = []
-    var pickerView = UIPickerView()
-    var webType: String = "一般"
-    var updateMode: Bool = false
-    
+    // - all data get from database
     var webDataList: [WebInformation] = []
+    // - data show in the tableview
     var tableViewList: [WebInformation] = []
-    
+    // - darg down to refresh
     var refreshControl = UIRefreshControl()
-    
+    // - count number of web data by selected type
     var countVal = Int()
     
-    // floating Button
+// ==== drop down menu section ====
+    @IBOutlet weak var dropDownView: UIView!
+    @IBOutlet weak var typeLabel: UILabel!
+    // - dropDown obj
+    let dropDown = DropDown()
+    // - types show in the drop down menu
+    var dataTypeList: [String] = []
+    // - selected type from drop down menu
+    var dropDownSelected: Int = 0
+    
+// ==== picker view section ====
+    // - data show in the picker view
+    var pickerViewMenu: [String] = []
+    var pickerView = UIPickerView()
+    // - default type
+    var webType: String = "一般"
+    // - flag to control selected type should be updated or not
+    var updateMode: Bool = false
+    
+    
+    
+// ==== floating Button ====
+    // - floating button component
     private let addBtn: UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
         button.backgroundColor =  #colorLiteral(red: 0.2320531011, green: 0.2503858805, blue: 0.3496725261, alpha: 1)
@@ -55,63 +63,79 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         return button
     }()
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         
+    // --- gesture recognizer ---
         
-        // --- gesture recognizer ---
         // long press
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressHandler))
         longPress.minimumPressDuration = 0.5
         self.webTableView.addGestureRecognizer(longPress)
+        
         // one tap
         let oneTap = UITapGestureRecognizer(target: self, action: #selector(tapHandler))
         oneTap.numberOfTapsRequired = 1
         self.webTableView.addGestureRecognizer(oneTap)
+        
         // swipe left
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(swipeLeftHandler))
         swipeLeft.direction = .left
         self.webTableView.addGestureRecognizer(swipeLeft)
         
+    // ---------------------------
+        
+        // top right add new type button setting
         addNewTypeBtn.layer.cornerRadius = 15
         
+        // drag down to refresh control
         refreshControl.addTarget(self, action: #selector(refresh), for: UIControl.Event.valueChanged)
         webTableView.addSubview(refreshControl)
         
+        // default text of drop down menu
         typeLabel.text = "全部"
 
+        // table view settings
         webTableView.separatorStyle = .none
         webTableView.showsVerticalScrollIndicator = false
-        
-        view.addSubview(addBtn)
-        addBtn.addTarget(self, action: #selector(addNewWeb), for: .touchUpInside	)
-        
-        let isCreated = DBManager.shared.createDB()
-//        print(isCreated)
-        let openDB = DBManager.shared.openDB()
-//        print(openDB)
-        
         webTableView.tableFooterView = UIView(frame: .zero)
         webTableView.delegate = self
         webTableView.dataSource = self
         
+        // floating button
+        view.addSubview(addBtn)
+        addBtn.addTarget(self, action: #selector(addNewWeb), for: .touchUpInside	)
+        
+        // create database
+        let isCreated = DBManager.shared.createDB()
+//        let openDB = DBManager.shared.openDB()
+        
+        
+        
         /* --------- need to reload --------- */
         
+        // get web type data from database (without "全部")
         dataTypeList = DBManager.shared.getWebTypeInfo()
+        // insert
         dataTypeList.insert("全部", at: 0)
+        // get pickerview data from dataType
         pickerViewMenu = Array(dataTypeList[1 ... dataTypeList.count - 1])
         
+        // get web info from database and update the number of tableview cells
         webDataList = DBManager.shared.showWebInfoTable()
         if webDataList.count != 0 {
             countVal = webDataList.count
         }
+        
     }	
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        webTableView.separatorStyle = .none
-        webTableView.showsVerticalScrollIndicator = false
+        
+//        webTableView.separatorStyle = .none
+//        webTableView.showsVerticalScrollIndicator = false
         
         dataTypeList = DBManager.shared.getWebTypeInfo()
         dataTypeList.insert("全部", at: 0)
@@ -121,12 +145,11 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         }
         
         countVal = countWebByType(typeLabel: dataTypeList[dropDownSelected])
-        
         pickerViewMenu = Array(dataTypeList[1 ... dataTypeList.count - 1])
-        
         webDataList = DBManager.shared.showWebInfoTable()
         
         
+        // drop down menu settings
         dropDownView.layer.cornerRadius = 15
         dropDown.anchorView = dropDownView
         dropDown.dataSource = dataTypeList
@@ -141,23 +164,26 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             self.autoFresh()
         }
         
+        // if in update mode, will not update webType to "一般"
         if !updateMode {
             webType = dataTypeList[1]
         }
     }
     
+    // floating button subview
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         addBtn.frame = CGRect(x: view.frame.size.width - 90, y: view.frame.size.height - 120, width: 60, height: 60)
     }
     
+    // drag down to refresh
     @objc func refresh (send: UIRefreshControl) {
         DispatchQueue.main.async {
             self.webTableView.reloadData()
             self.refreshControl.endRefreshing()
         }
     }
-    
+    // refresh screen instantly after update
     func autoFresh() {
         DispatchQueue.main.async {
             self.webTableView.reloadData()
@@ -204,7 +230,6 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         
         let p = oneTap.location(in: self.webTableView)
         let indexPath = self.webTableView.indexPathForRow(at: p)
-//        print("one tap !! \(indexPath!.row)")
         if indexPath == nil {
             print("tap on table view, not row")
         } else {
@@ -267,15 +292,12 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
                 let newWebName = (alertController.textFields?.first)! as UITextField
                 let newWebUrl = (alertController.textFields?.last)! as UITextField
                 
-                
                 if newWebName.text! == "" || newWebUrl.text! == "" {
                     errorFlag = true
                 } else {
                     // call verify url
                     urlError = self.verifyUrl(urlString: newWebUrl.text!)
-                    
                 }
-                
                 
                 if !errorFlag && urlError {
                     print("webType before update: \(self.webType)")
@@ -291,7 +313,6 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
                 
                 if isUpdated {
                     self.view.showToast(text: "網站更新成功，若無更新畫面，請下拉刷新！")
-                    
                     self.countVal = self.countWebByType(typeLabel: "全部")
                     self.viewDidAppear(true)
                     self.autoFresh()
@@ -304,12 +325,12 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             alertController.view.addSubview(pickerFrame)
             alertController.addAction(confirmAct)
             alertController.addAction(cancelAct)
-            
             self.present(alertController, animated: true, completion: nil)
         }
         self.viewDidAppear(true)
     }
     
+    // verify input url is valid
     func verifyUrl(urlString: String?) -> Bool {
         if let urlString = urlString {
                if let url = NSURL(string: urlString) {
@@ -319,14 +340,12 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
        return false
     }
     
-    
     @IBAction func showDropMenu(_ sender: Any) {
         dropDown.show()
     }
     
     
     @objc private func addNewWeb(_ sender: Any) {
-        
         let alertController = UIAlertController(title: "新增常用網站", message: "輸入資訊\n\n\n\n", preferredStyle: .alert)
         
         // text input
@@ -362,7 +381,6 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             var isInserted: Bool
             
             let webName = (alertController.textFields?.first)! as UITextField
-            
             let webUrl = (alertController.textFields?.last)! as UITextField
             
             if webName.text! == "" || webUrl.text! == "" {
@@ -370,16 +388,10 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             } else {
                 // call verify url
                 urlError = self.verifyUrl(urlString: webUrl.text!)
-                
             }
             
             if !errorFlag && urlError {
-//                print("網站網址是：\(webUrl.text!)")
-//                print("網站名稱是：\(webName.text!)")
-//                print("網站類型是：\(self.webType)")
-            
                 isInserted = DBManager.shared.insertWebInfo(webName: webName.text!, webUrl: webUrl.text!, webType: self.webType)
-//                print("--網站類型是：\(self.webType)")
             } else if errorFlag {
                 self.view.showToast(text: "名稱或網址不可為空！")
                 isInserted = false
@@ -387,7 +399,6 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
                 self.view.showToast(text: "無效的網址！")
                 isInserted = false
             }
-            
             if isInserted {
                 self.view.showToast(text: "網站新增成功，若無更新畫面，請下拉刷新！")
                 
@@ -403,14 +414,12 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         alertController.view.addSubview(pickerFrame)
         alertController.addAction(confirmAct)
         alertController.addAction(cancelAct)
-        
         self.present(alertController, animated: true, completion: nil)
     }
     
     
     @IBAction func addNewType(_ sender: Any) {
         let alertController = UIAlertController(title: "新增類別", message: "", preferredStyle: .alert)
-        
         // text input
         alertController.addTextField(configurationHandler: {
             (textField: UITextField) -> Void in
@@ -420,8 +429,6 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         
         // cancel button
         let cancelAct = UIAlertAction(title: "取消", style: .cancel, handler: {(action: UIAlertAction!) -> Void in
-//            self.view.showToast(text: "Cancel button pressed!")
-//            print("Cancel button pressed!")
             self.viewDidAppear(true)
         })
         
@@ -430,15 +437,12 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             
             var errorFlag: Bool = false
             var isInserted: Bool
-            
             let newType = alertController.textFields![0] as UITextField
             
             if newType.text  == "" {
                 errorFlag = true
             }
-            
             if !errorFlag {
-//                print("newType: \(newType.text!)")
                 isInserted = DBManager.shared.insertWebType(type: newType.text!)
             } else {
                 self.view.showToast(text: "類別不可為空！")
@@ -448,7 +452,6 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             if isInserted {
                 self.view.showToast(text: "類別新增成功")
                 self.viewDidAppear(true)
-//                print(self.dataTypeList)
             } else {
                 print("insert failed")
             }
@@ -458,11 +461,10 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         
         alertController.addAction(confirmAct)
         alertController.addAction(cancelAct)
-        
         self.present(alertController, animated: true, completion: nil)
     }
     
-    // picker view
+    // === picker view ===
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -472,15 +474,14 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-//        print("picker view row: \(row)")
         return pickerViewMenu[row]
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-//        print("selected row: \(row)")
         webType = pickerViewMenu[row]
     }
     
+    // count numbers of data should be shown in table view
     func countWebByType(typeLabel: String) -> Int {
         var count: Int = 0
         tableViewList.removeAll()
@@ -496,15 +497,12 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         return count
     }
     
-    // table view
+    // table view & table view cell
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        print(countVal)
         return countVal
-    
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let cell = webTableView.dequeueReusableCell(withIdentifier: "WebCell", for: indexPath) as! WebInfoTableViewCell
         
         cell.bgView.layer.cornerRadius = 15
@@ -522,9 +520,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             }
             cell.webName.text = tableViewList[indexPath.row].name
             cell.webType.text = "#" + tableViewList[indexPath.row].type
-//            print("webName: \(cell.webName.text!)")
         }
-        
         return cell
     }
     
@@ -533,9 +529,10 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     }
 }
 
+
+// Toast
 extension UIView {
     func showToast(text: String){
-            
             self.hideToast()
             let toastLb = UILabel()
             toastLb.numberOfLines = 0
@@ -569,7 +566,6 @@ extension UIView {
                 toastLb.removeFromSuperview()
             }
         }
-        
         func hideToast(){
             for view in self.subviews{
                 if view is UILabel , view.tag == 9999{
