@@ -153,10 +153,10 @@ class DBManager: NSObject {
         return false
     }
     
-    func showWebInfoTable() -> [WebInformation] {
+    func getWebInfoTable() -> [WebInformation] {
         var webDataList :[WebInformation] = []
         if openDB() {
-            let query = "select * from webInfo"
+            let query = "select * from webInfo order by webID desc"
             
             do {
 //                print("---webInfo---")

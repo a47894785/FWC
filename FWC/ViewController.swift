@@ -124,7 +124,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         pickerViewMenu = Array(dataTypeList[1 ... dataTypeList.count - 1])
         
         // get web info from database and update the number of tableview cells
-        webDataList = DBManager.shared.showWebInfoTable()
+        webDataList = DBManager.shared.getWebInfoTable()
         if webDataList.count != 0 {
             countVal = webDataList.count
         }
@@ -139,14 +139,14 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         
         dataTypeList = DBManager.shared.getWebTypeInfo()
         dataTypeList.insert("全部", at: 0)
-        webDataList = DBManager.shared.showWebInfoTable()
+        webDataList = DBManager.shared.getWebInfoTable()
         if webDataList.count != 0 {
             countVal = webDataList.count
         }
         
         countVal = countWebByType(typeLabel: dataTypeList[dropDownSelected])
         pickerViewMenu = Array(dataTypeList[1 ... dataTypeList.count - 1])
-        webDataList = DBManager.shared.showWebInfoTable()
+        webDataList = DBManager.shared.getWebInfoTable()
         
         
         // drop down menu settings
